@@ -1,0 +1,60 @@
+﻿#   This file is part of Sons of Odin.
+#
+#   Sons of Odin is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   Sons of Odin is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with Sons of Odin.  If not, see <https://www.gnu.org/licenses/>.
+
+soo_rape_victim_opinion = {
+    opinion = -100
+}
+
+soo_raped_spouse_opinion = {
+    opinion = -100
+    years = 25
+    decaying = yes 
+}
+
+soo_raped_family_opinion = {
+    opinion = -100
+    years = 25
+    decaying = yes 
+}
+
+soo_raped_soulmate_opinion = {
+    opinion = -100
+    years = 20
+    decaying = yes 
+}
+
+soo_raped_friend_opinion = {
+    opinion = -50
+    years = 10
+    decaying = yes 
+}
+
+soo_raped_lover_opinion = {
+    opinion = -50
+    years = 10
+    decaying = yes 
+}
+
+soo_subjected_to_rape_opinion = {
+    opinion = -25
+    years = 5 
+    decaying = yes 
+}
+
+soo_spared_from_rape_opinion = {
+    opinion = 25
+    years = 5 
+    decaying = yes 
+}

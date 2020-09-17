@@ -1,0 +1,135 @@
+﻿#   This file is part of Sons of Odin.
+#
+#   Sons of Odin is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   Sons of Odin is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with Sons of Odin.  If not, see <https://www.gnu.org/licenses/>.
+
+soo_migration_war_declared_effect = {
+    $ATTACKER$ = {
+        spawn_army = {
+            name = event_troop_default_name
+            levies = 1000
+            men_at_arms = {
+                type = huscarl
+                stacks = 10
+            }
+            location = $ATTACKER$.capital_province
+            war = $WAR$
+            uses_supply = no
+            inheritable = no
+        }
+        every_held_title = {
+            if = {
+                limit = {
+                    tier = tier_county 
+                }
+                $ATTACKER$ = {
+                    spawn_army = {
+                        name = event_troop_default_name
+                        levies = 500
+                        men_at_arms = {
+                            type = armored_footmen
+                            stacks = 5
+                        }
+                        location = $ATTACKER$.capital_province
+                        war = $WAR$
+                        uses_supply = no
+                        inheritable = no
+                    }
+                }
+            }
+        }   
+    }
+}
+
+soo_migration_war_scripted_effect = {
+    $INVADER$ = {
+        # Destroy excess titles first, except counties.
+        custom_tooltip = soo_migration_war_scripted_effect.tt.destroy_other_titles
+        hidden_effect = {
+            every_held_title = {
+                limit = {
+                    tier >= tier_duchy
+                }
+                save_temporary_scope_as = excess_title
+                $INVADER$ = { destroy_title = scope:excess_title }
+            }
+        }
+
+        #custom_tooltip = soo_migration_war_scripted_effect.tt.vassals_made_independent
+        # All direct vassals are given their independence.
+        every_vassal = {
+            limit = {
+                highest_held_title_tier >= tier_county 
+            }
+            create_title_and_vassal_change = change 
+            scope:change = {
+                set_title_and_vassal_change_type = independency
+                set_add_claim_on_loss = no 
+            }
+            becomes_independent = { change = scope:change }
+            resolve_title_and_vassal_change = scope:change 
+        }
+        # And catch everything else to preserve structure 
+        every_vassal_or_below = {
+            limit = {
+                highest_held_title_tier >= tier_county 
+            }
+            create_title_and_vassal_change = change 
+            scope:change = {
+                set_title_and_vassal_change_type = independency
+                set_add_claim_on_loss = no 
+            }
+            becomes_independent = { change = scope:change }
+            resolve_title_and_vassal_change = scope:change 
+        }
+
+        every_sub_realm_title = {
+            limit = {
+                NOT = {
+                    is_in_list = $TITLES$
+                }
+                tier = tier_county 
+            }
+            save_temporary_scope_as = seceding_county
+            # Create a character to hold this county 
+            create_character = {
+                location = scope:seceding_county
+                template = post_migration_local_warlord_template
+                gender = male 
+                culture = $INVADER$.culture 
+                faith = $INVADER$.faith 
+                save_scope_as = local_warlord 
+            }
+            create_title_and_vassal_change = change 
+            scope:change = { set_title_and_vassal_change_type = usurped }
+            scope:seceding_county = {
+                change_title_holder = {
+                    holder = scope:local_warlord
+                    change = scope:change 
+                    take_baronies = yes 
+                }
+            }
+            resolve_title_and_vassal_change = scope:change 
+            # And finally, independence
+            create_title_and_vassal_change = change
+            scope:local_warlord = {
+                scope:change = {
+                    set_title_and_vassal_change_type = independency
+                    set_add_claim_on_loss = no
+                }
+                becomes_independent = { change = scope:change }
+            }
+            resolve_title_and_vassal_change = scope:change
+        }
+    }
+}

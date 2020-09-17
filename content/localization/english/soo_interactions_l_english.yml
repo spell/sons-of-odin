@@ -1,0 +1,3 @@
+﻿l_english:
+    soo_appoint_shield_maiden_interaction_toast:0 "Appointed [soo_shield_maiden|E]"
+    soo_appoint_shield_maiden_interaction_toast_desc:2 "[actor.GetShortUIName] appointed [recipient.GetTitledFirstName] as a [soo_shield_maiden|E]"

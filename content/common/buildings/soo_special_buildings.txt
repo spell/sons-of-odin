@@ -1,0 +1,127 @@
+﻿#   This file is part of Sons of Odin.
+#
+#   Sons of Odin is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   Sons of Odin is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with Sons of Odin.  If not, see <https://www.gnu.org/licenses/>.
+
+# The Irminsul of Osnabruck 
+soo_irminsul_grove_01 = {
+    asset = {
+		type = pdxmesh
+		name = "building_special_cathedral_pagan_mesh"
+	}
+
+    construction_time = very_slow_construction_time
+
+	type_icon = "icon_soo_structure_irminsul.dds"
+	
+	can_construct_potential = {
+		always = yes # The tribes could build this, so can you!
+	}
+
+	can_construct = {
+		scope:holder = {
+			faith = { religion_tag = germanic_religion }
+		}
+	}
+	
+	is_enabled = {
+		OR = {
+			scope:holder = {
+				faith = { religion_tag = germanic_religion }
+			}
+			custom_description = {
+				text = holy_site_building_trigger
+				barony = {
+					is_holy_site_of = scope:holder.faith
+				}
+			}
+		}
+	}
+
+    show_disabled = yes
+
+    cost_gold = 1000
+
+    character_modifier = {
+        learning = 2
+    }
+
+    county_modifier = {
+		development_growth_factor = 0.05
+	}
+
+    ai_value = {
+		base = 100
+	}
+
+    next_building = soo_irminsul_grove_02
+
+    type = special 
+}
+
+# The Irminsul of Osnabruck 
+soo_irminsul_grove_02 = {
+    asset = {
+		type = pdxmesh
+		name = "building_special_cathedral_pagan_mesh"
+	}
+
+    construction_time = very_slow_construction_time
+
+	type_icon = "icon_soo_structure_irminsul.dds"
+	
+	can_construct_potential = {
+		always = yes # The tribes could build this, so can you!
+	}
+
+	can_construct = {
+		scope:holder = {
+			faith = { religion_tag = germanic_religion }
+		}
+	}
+	
+	is_enabled = {
+		OR = {
+			scope:holder = {
+				faith = { religion_tag = germanic_religion }
+			}
+			custom_description = {
+				text = holy_site_building_trigger
+				barony = {
+					is_holy_site_of = scope:holder.faith
+				}
+			}
+		}
+	}
+
+    show_disabled = yes
+
+    cost_gold = 1000
+
+    character_modifier = {
+        learning = 3
+        learning_per_piety_level = 1
+        monthly_piety_gain_per_knight_add = 0.15
+        monthly_dynasty_prestige_mult = 0.10
+    }
+
+    county_modifier = {
+		development_growth_factor = 0.15
+	}
+
+    ai_value = {
+		base = 100
+	}
+
+    type = special 
+}

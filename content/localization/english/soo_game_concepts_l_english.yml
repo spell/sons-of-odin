@@ -1,0 +1,5 @@
+﻿l_english:
+    game_concept_soo_shield_maiden:0 "Shield-Maiden"
+    game_concept_soo_shield_maiden_possessive:0 "Shield-Maiden's"
+    game_concept_soo_shield_maidens:0 "Shield-Maidens"
+    game_concept_soo_shield_maiden_desc:1 "A $game_concept_soo_shield_maiden$ is an heroic $norse_pagan_adj$ female [character|E] of exceptional [martial|E] skill who has been chosen by her [liege|E] to fight in battle.\n\n$game_concept_soo_shield_maidens$ can be recruited as a $knight_champion$."

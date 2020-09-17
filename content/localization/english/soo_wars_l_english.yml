@@ -1,0 +1,9 @@
+﻿l_english:
+    soo_migrate_county_cb_name:1 "Migrate to [county|E]"
+    soo_migrate_duchy_cb_name:1 "Migrate to [duchy|E]"
+    soo_migrate_kingdom_cb_name:1 "Migrate to [kingdom|E]"
+    soo_migrate_war_name:2 "$ORDER$ [ATTACKER.GetPrimaryTitle.GetAdjective] migration to the [TITLE.GetBaseName]"
+    soo_migrate_war_name_base:0 "[ATTACKER.GetPrimaryTitle.GetAdjective][DEFENDER.GetPrimaryTitle.GetName]"
+    soo_migration_war_scripted_effect.tt.destroy_other_titles:0 "Any [titles|E] outside of the [target_title.GetName] are destroyed"
+    soo_migration_war_scripted_effect.tt.vassals_made_independent:0 "All [vassals|E] are made [independent|E] or transferred to [attacker.GetName]'s [liege|E]"
+    soo_migration_war_scripted_effect.tt.former_holdings_given_to_warlords:0 "Former [holdings|E] are given to local warlords"

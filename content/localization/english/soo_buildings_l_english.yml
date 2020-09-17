@@ -1,0 +1,7 @@
+﻿l_english:
+    building_type_soo_irminsul_grove_01:1 "Great Irminsul"
+    building_type_soo_irminsul_grove_01_desc:0 "#F An Irminsul was a sacred pillar attested to play an important role in the Germanic paganism of the old Saxons. The most famous Irminsul was destroyed by Charlemagne during the Saxon Wars.#!"
+    building_soo_irminsul_grove_01:0 "Great Irminsul Remains"
+    building_soo_irminsul_grove_01_desc:0 "$building_type_soo_irminsul_grove_01_desc$"
+    building_soo_irminsul_grove_02:0 "Great Irminsul Grove"
+    building_soo_irminsul_grove_02_desc:0 "#F Originally destroyed by Charlemagne the Great in 772 AD, the Irminsul of Osnabruck stands once more as a testament to the glory of the gods.#!"

@@ -1,0 +1,3 @@
+﻿l_english:
+    trait_soo_shield_maiden:0 "Shield-Maiden"
+    trait_soo_shield_maiden_desc:0 "[ROOT.Char.GetFirstNameNoTooltip] has been chosen as a [soo_shield_maiden|E] by [ROOT.Char.GetHerHis] [liege|E]."

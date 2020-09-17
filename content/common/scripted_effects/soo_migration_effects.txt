@@ -1,0 +1,57 @@
+﻿#   This file is part of Sons of Odin.
+#
+#   Sons of Odin is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   Sons of Odin is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with Sons of Odin.  If not, see <https://www.gnu.org/licenses/>.
+
+soo_embrace_local_culture_effect = {
+    set_culture = $CULTURE$
+    every_spouse = {
+        limit = { 
+            is_landed = no
+            is_courtier_of = root 
+        }
+        set_culture = $CULTURE$
+    }
+    every_close_family_member = {
+        limit = {
+            NOT = { is_spouse_of = root }
+            is_landed = no
+            is_courtier_of = root  
+        }
+        set_culture = $CULTURE$
+    }
+    every_vassal = {
+        limit = {
+            is_ai = yes 
+        }
+        set_culture = $CULTURE$
+        hidden_effect = {
+            every_spouse = {
+                limit = { 
+                    NOT = { is_spouse_of = prev }
+                    is_landed = no
+                    is_courtier_of = prev 
+                }
+                set_culture = $CULTURE$
+            }
+            every_close_family_member = {
+                limit = {
+                    NOT = { is_spouse_of = prev }
+                    is_landed = no
+                    is_courtier_of = prev 
+                }
+                set_culture = $CULTURE$
+            }
+        }
+    }
+}

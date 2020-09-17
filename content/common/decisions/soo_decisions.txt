@@ -1,0 +1,74 @@
+﻿#   This file is part of Sons of Odin.
+#
+#   Sons of Odin is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   Sons of Odin is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with Sons of Odin.  If not, see <https://www.gnu.org/licenses/>.
+
+soo_restore_the_kingdom_of_saxony_decision = {
+    picture = "gfx/interface/illustrations/decisions/decision_realm.dds"
+	major = yes
+
+	ai_check_interval = 120
+
+    is_shown = {
+        OR = {
+            has_culture = culture:saxon
+            # TODO: Anglo-Saxon culture and Germanic pagans only if they hold land in the de jure
+            has_culture = culture:anglo_saxon
+            has_religion = religion:germanic_religion 
+        }
+        is_landed = yes 
+        NOT = {
+			is_target_in_global_variable_list = {
+				name = unavailable_unique_decisions
+				target = flag:soo_restore_the_kingdom_of_saxony_decision
+			}
+		}
+    }
+
+    is_valid = {
+        completely_controls = title:d_anhalt
+        completely_controls = title:d_angria
+        completely_controls = title:d_ostfalen
+    }
+
+    is_valid_showing_failures_only = {
+		is_imprisoned = no
+		is_available_adult = yes
+		is_at_war = no 
+        OR = {
+            is_independent_ruler = yes 
+            AND = {
+                exists = liege 
+                NOT = { liege = this }
+                liege = { highest_held_title_tier = tier_empire }
+            }
+        }
+	}
+
+    effect = {
+        add_to_global_variable_list = {
+			name = unavailable_unique_decisions
+			target = flag:soo_restore_the_kingdom_of_saxony_decision
+		}
+        # This effect actually does all the work
+        soo_restore_the_kingdom_of_saxony_effect = yes 
+    }
+
+    ai_potential = {
+        always = yes 
+    }
+
+    ai_will_do = {
+        base = 100
+    }
+}

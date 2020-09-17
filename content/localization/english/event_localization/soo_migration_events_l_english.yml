@@ -1,0 +1,10 @@
+﻿l_english:
+    soo_migration.1001.t:0 "The New Gods"
+    soo_migration.1001.desc:0 "1"
+    soo_migration.1001.a:0 "The time has come to embrace [local_faith.GetNameNoTooltip]."
+    soo_migration.1001.b:0 "They will embrace [ROOT.Char.GetFaith.PantheonTerm] in time."
+    
+    soo_migration.1002.t:0 "Strangers in a Strange Land"
+    soo_migration.1002.desc:0 "Even though you have proven your right to rule over them through strength of arms, ruling over your new subjects has proven difficult as they do not speak the same language as you.\n\nRecently you have been considering learning their language. It would certainly make ruling them an easier task, and no doubt ease their concerns."
+    soo_migration.1002.a:0 "Let us adopt [local_culture.GetNameNoTooltip] culture."
+    soo_migration.1002.b:0 "They will learn of our [ROOT.Char.GetCulture.GetNameNoTooltip] traditions in time."

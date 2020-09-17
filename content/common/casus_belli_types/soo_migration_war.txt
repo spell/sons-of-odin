@@ -1,0 +1,336 @@
+﻿#   This file is part of Sons of Odin.
+#
+#   Sons of Odin is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   Sons of Odin is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with Sons of Odin.  If not, see <https://www.gnu.org/licenses/>.
+
+soo_migration_duchy_cb = {
+    group = invasion 
+    combine_into_one = yes
+    should_show_war_goal_subview = yes 
+    mutually_exclusive_titles = { always = yes }
+
+    # Allowed for Germanic Norse rulers only!
+    allowed_for_character = {
+        # Feudal vikings cannot migrate
+        NOT = { has_government = feudal_government }
+        highest_held_title_tier >= tier_county
+        has_religion = religion:germanic_religion
+        can_use_conquest_cbs_trigger = yes 
+        # Scandinavian vikings only, sorry Varangians! 
+        any_realm_county = {
+            title_province = { geographical_region = world_europe_north }
+        }
+    }
+
+    allowed_for_character_display_regardless = {
+		prestige_level >= 3
+	}
+
+    # Allowed against any country in Europe, except Scandinavia
+    allowed_against_character = {
+        any_realm_county = {
+            title_province = {
+                OR = {
+                    geographical_region = world_europe_west
+                    geographical_region = world_europe_south
+                    geographical_region = world_europe_east
+                }
+            }
+        }
+    }
+
+    ai_can_target_all_titles = {
+		can_use_viking_invasion_cbs_trigger = yes
+	}
+    
+	ai_score_mult = {
+		value = viking_conquest_ai_score_value
+	}
+
+    target_titles = all
+    target_title_tier = duchy 
+    target_de_jure_regions_above = yes 
+    ignore_effect = change_title_holder 
+
+    # The target county must be within Europe excluding Scandinavia.
+    valid_to_start = {
+        scope:target = {
+            soo_migration_cb_valid_to_start_trigger = yes 
+        }
+    }
+
+    should_invalidate = {
+		NOT = {
+			any_in_list = {
+				list = target_titles
+				any_in_de_jure_hierarchy = {
+					tier = tier_county
+					holder = {
+						target_is_same_character_or_above = scope:defender
+					}
+				}
+			}
+		}
+        # Only counts can use the county migration CB
+        scope:attacker = { highest_held_title_tier < tier_county }
+	}
+    
+    on_declaration = {
+		on_declared_war = yes
+        soo_migration_war_declared_effect = {
+            ATTACKER = scope:attacker
+            WAR = scope:war 
+        }
+	}
+
+	on_victory_desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { scope:attacker = { is_local_player = yes } }
+				desc = county_conquest_cb_victory_desc_attacker
+			}
+			desc = county_conquest_cb_victory_desc
+		}
+	}
+
+    on_victory = {
+        random_in_list = {
+            list = target_titles 
+            save_scope_as = target_title
+        }
+
+        scope:attacker = {
+            # Sum up all of our current holdings and vassals
+            every_vassal = {
+                limit = {
+                    highest_held_title_tier >= tier_county 
+                }
+                add_to_list = seceding_vassals
+                debug_log = "Found vassal to secede"
+            }
+            every_sub_realm_county = {
+                limit = {
+                    tier = tier_county 
+                    exists = holder 
+                    holder = scope:attacker 
+                }
+                add_to_list = seceding_counties
+                debug_log = "Seceding counties"
+            }
+            # Take all of our new conquered territory
+            create_title_and_vassal_change = change 
+            scope:change = {
+                set_title_and_vassal_change_type = conquest 
+                set_add_claim_on_loss = yes 
+            }
+            every_in_list = {
+                list = target_titles 
+                every_in_de_jure_hierarchy = {
+                    limit = {
+                        tier = tier_county 
+                        exists = holder 
+                        holder = {
+                            OR = {
+                                this = scope:defender 
+                                target_is_liege_or_above = scope:defender 
+                            }
+                        }
+                    }
+                    add_to_list = taken_titles 
+                    change_title_holder = {
+                        holder = scope:attacker 
+                        change = scope:change 
+                        take_baronies = yes 
+                    }
+                }
+            }
+            resolve_title_and_vassal_change = scope:change
+            # Release all of our counties as independent territories (or to our liege if we have one)
+            hidden_effect = { 
+                every_in_list = {
+                    list = seceding_counties
+                    save_temporary_scope_as = seceding_county
+                    create_character = {
+                        location = scope:seceding_county
+                        template = post_migration_local_warlord_template
+                        gender = male 
+                        culture = scope:attacker.culture 
+                        faith = scope:attacker.faith 
+                        save_scope_as = local_warlord 
+                    }
+                    create_title_and_vassal_change = change 
+                    scope:change = { 
+                        set_title_and_vassal_change_type = usurped
+                        set_add_claim_on_loss = no 
+                    }
+                    change_title_holder = {
+                        holder = scope:local_warlord
+                        change = scope:change 
+                        take_baronies = yes 
+                    }
+                    resolve_title_and_vassal_change = scope:change
+                    scope:local_warlord = {
+                        add_to_list = seceding_vassals
+                    }
+                }
+            }
+            # Release all of our vassals (and give them to our liege, if we have one)
+            custom_tooltip = "soo_migration_war_scripted_effect.tt.vassals_made_independent"
+            hidden_effect = {
+                create_title_and_vassal_change = change 
+                if = {
+                    # If we have a liege, give him our vassals
+                    limit = { 
+                        exists = liege 
+                        NOT = { liege = this }
+                    }
+                    every_in_list = {
+                        list = seceding_vassals
+                        change_liege = {
+                            liege = scope:attacker.liege
+                            change = scope:change
+                        }
+                    }
+                }
+                else = {
+                    # If we don't have a liege, make our vassals independent
+                    scope:change = {
+                        set_title_and_vassal_change_type = independency
+                        set_add_claim_on_loss = no 
+                    }
+                    every_in_list = {
+                        list = seceding_vassals
+                        becomes_independent = { change = scope:change }
+                    }
+                }
+                resolve_title_and_vassal_change = scope:change 
+            }
+            # Destroy any excess titles
+            custom_tooltip = "soo_migration_war_scripted_effect.tt.destroy_other_titles"
+            hidden_effect = {
+                every_held_title = {
+                    limit = {
+                        tier >= tier_duchy 
+                    }
+                    scope:attacker = { destroy_title = prev }
+                }
+            }
+            # Make the attacker independent
+            create_title_and_vassal_change = change 
+            scope:change = {
+                set_title_and_vassal_change_type = independency 
+                set_add_claim_on_loss = no
+            }
+            becomes_independent = { change = scope:change }
+            resolve_title_and_vassal_change = scope:change
+            # If the duchy we conquered has no owner then create it
+            every_in_list = {
+                list = target_titles
+                limit = { 
+                    tier >= tier_duchy 
+                    NOT = { exists = holder }
+                }
+                create_title_and_vassal_change = change 
+                scope:change = {
+                    set_title_and_vassal_change_type = created
+                }
+                change_title_holder = {
+                    holder = scope:attacker  
+                    change = scope:change 
+                }
+                resolve_title_and_vassal_change = scope:change 
+            }
+            # If we conquered the capital of the duchy, make it our capital
+            every_in_list = {
+                list = target_titles
+                limit = {
+                    tier >= tier_duchy 
+                }
+                if = {
+                    limit = {
+                        title_capital_county = {
+                            exists = holder 
+                            holder = scope:attacker 
+                        } 
+                    }
+                    title_capital_county = {
+                        save_temporary_scope_as = new_capital
+                    }
+                    scope:attacker = {
+                        set_realm_capital = scope:new_capital
+                    }
+                }
+            }
+            # If any county in our new lands is feudal, we should adopt feudalism
+            if = {
+                limit = {
+                    any_realm_county = {
+                        title_province = {
+                            has_holding_type = castle_holding
+                        }
+                    }
+                }
+                change_government = feudal_government
+                hidden_effect = {
+                    #Nuke tribal authorities.
+                    if = {
+                        limit = { has_realm_law = tribal_authority_0 }
+                        remove_realm_law = tribal_authority_0
+                    }
+                    if = {
+                        limit = { has_realm_law = tribal_authority_1 }
+                        remove_realm_law = tribal_authority_1
+                    }
+                    if = {
+                        limit = { has_realm_law = tribal_authority_2 }
+                        remove_realm_law = tribal_authority_2
+                    }
+                    if = {
+                        limit = { has_realm_law = tribal_authority_3 }
+                        remove_realm_law = tribal_authority_3
+                    }
+                    #Start off crown authorities.
+                    if = {
+                        limit = {
+                            NOT = { has_realm_law = crown_authority_0 }
+                        }
+                        add_realm_law_skip_effects = crown_authority_0
+                    }
+                }
+            }
+        }
+
+        # Add a truce
+        add_truce_attacker_victory_effect = yes 
+    }
+
+	transfer_behavior = transfer
+
+	on_primary_attacker_death = inherit
+	on_primary_defender_death = inherit
+
+	attacker_allies_inherit = yes
+	defender_allies_inherit = yes
+
+	war_name = "soo_migrate_war_name"
+	war_name_base = "soo_migrate_war_name_base"
+	cb_name = "soo_migrate_duchy_cb_name"
+
+	interface_priority = 99
+
+	use_de_jure_wargoal_only = yes
+
+	attacker_wargoal_percentage = 0.8
+
+	min_ai_score = 100
+} 

@@ -1,0 +1,68 @@
+﻿#   This file is part of Sons of Odin.
+#
+#   Sons of Odin is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   Sons of Odin is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with Sons of Odin.  If not, see <https://www.gnu.org/licenses/>.
+
+soo_appoint_shield_maiden_interaction = {
+    category = interaction_category_vassal
+    common_interaction = yes 
+
+    is_shown = {
+        NOT = { scope:actor = scope:recipient }
+        scope:recipient = {
+            is_female = yes 
+            is_landed = no 
+            is_adult = yes 
+            is_courtier_of = scope:actor
+            NOT = { has_trait = soo_shield_maiden }
+        }
+    }
+
+    cost = {
+        prestige = {
+            value = medium_prestige_value 
+        }
+    }
+
+    is_valid_showing_failures_only = {
+        scope:recipient = {
+            has_religion = religion:germanic_religion
+            OR = {
+                martial >= high_skill_rating
+                prowess >= high_skill_rating
+            }
+        }
+    }
+
+    auto_accept = yes 
+
+    on_accept = {
+        scope:actor = {
+            hidden_effect = {	
+				send_interface_toast = {
+					title = soo_appoint_shield_maiden_interaction_toast
+					left_icon = scope:actor
+					right_icon = scope:recipient
+					custom_tooltip = soo_appoint_shield_maiden_interaction_toast_desc
+				}
+			}
+        }
+        scope:recipient = {
+            add_trait = soo_shield_maiden 
+            add_opinion = {
+                target = scope:actor
+                modifier = soo_appointed_shield_maiden_opinion
+            }
+        }
+    }    
+}

@@ -1,0 +1,70 @@
+﻿#   This file is part of Sons of Odin.
+#
+#   Sons of Odin is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   Sons of Odin is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with Sons of Odin.  If not, see <https://www.gnu.org/licenses/>.
+
+# Modifies this trigger to now only work on neighboring counties, stripping away the overseas
+# viking conquests all together.
+neighboring_county_or_viking_conquest_trigger = {
+	any_neighboring_county = {
+		holder = {
+			target_is_same_character_or_above = $CHARACTER$
+		}
+	}
+}
+
+# Modifies this trigger to now also accept characters with shield maiden trait
+can_be_knight_trigger = {
+	OR = {
+		can_be_warrior_trigger = { ARMY_OWNER = $ARMY_OWNER$ }
+		has_trait = soo_shield_maiden
+	}
+	NOR = {
+		AND = {
+			has_trait = devoted
+			faith = {
+				NOT = {
+					has_doctrine_parameter = clergy_can_fight
+				}
+			}
+		}
+		AND = {
+			is_clergy = yes
+			faith = {
+				NOT = {
+					has_doctrine_parameter = clergy_can_fight
+				}
+			}
+		}
+	}
+	is_ai = yes
+}
+
+soo_migration_cb_valid_to_start_trigger = {
+	any_in_de_jure_hierarchy = {
+		tier = tier_county
+		AND = {
+			is_coastal_county = yes
+			holder = {
+				top_liege = scope:defender
+			}
+		}
+		title_province = {
+			OR = {
+				geographical_region = world_europe_west
+				geographical_region = world_europe_south
+				geographical_region = world_europe_east
+			}
+		}
+	}
+}

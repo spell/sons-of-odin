@@ -1,0 +1,25 @@
+﻿#   This file is part of Sons of Odin.
+#
+#   Sons of Odin is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   Sons of Odin is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with Sons of Odin.  If not, see <https://www.gnu.org/licenses/>.
+
+###c_brunswick
+2901 = {	#BRUNSWICK
+	culture = saxon
+	religion = catholic
+	holding = castle_holding
+
+    # Add slot for our special building, this will prevent the game from adding the generic building
+    special_building_slot = soo_irminsul_grove_01
+    special_building = soo_irminsul_grove_01
+}
