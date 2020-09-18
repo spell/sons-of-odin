@@ -1,0 +1,79 @@
+﻿#   This file is part of Sons of Odin.
+#
+#   Sons of Odin is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   Sons of Odin is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with Sons of Odin.  If not, see <https://www.gnu.org/licenses/>.
+
+### Shield-Maiden related character templates
+# Regular Shield-Maiden
+soo_shield_maiden_template = {
+    age = { 20 30 }
+    dynasty = none
+    culture = scope:warrior_woman_home.culture
+    faith = root.faith
+    gender = female 
+    diplomacy = 8
+    martial = 10
+    intrigue = 6
+    stewardship = 8
+    learning = 8
+    prowess = 10
+    trait = education_martial_3
+    trait = physique_good_2
+    trait = brave 
+    trait = ambitious 
+    random_traits = no  
+}
+
+# Exceptional Shield-Maiden
+soo_exceptional_shield_maiden_template = {
+    age = { 20 30 }
+    dynasty = none
+    culture = scope:warrior_woman_home.culture
+    faith = root.faith
+    gender = female 
+    diplomacy = 10
+    martial = 14
+    intrigue = 8
+    stewardship = 10
+    learning = 10
+    prowess = 10
+    trait = education_martial_4
+    trait = physique_good_3
+    trait = brave 
+    trait = ambitious 
+    trait = diligent
+    random_traits = no 
+}
+
+# Shield-Maiden sent by Odin himself
+soo_zealous_shield_maiden_template = {
+    age = { 20 30 }
+    dynasty = none
+    culture = scope:warrior_woman_home.culture
+    faith = root.faith
+    gender = female 
+    diplomacy = 10
+    martial = 14
+    intrigue = 5
+    stewardship = 7
+    learning = 14
+    prowess = 10
+    trait = education_learning_3
+    trait = physique_good_2
+    trait = intellect_good_2
+    trait = brave 
+    trait = zealous
+    trait = diligent
+    trait = holy_warrior
+    random_traits = no 
+}

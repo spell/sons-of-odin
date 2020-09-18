@@ -1,0 +1,133 @@
+﻿#   This file is part of Sons of Odin.
+#
+#   Sons of Odin is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   Sons of Odin is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with Sons of Odin.  If not, see <https://www.gnu.org/licenses/>.
+
+namespace = soo_guest
+
+# Shield-Maiden related events
+#  0001 - A woman from a village offers her service
+
+# A woman from a village in your realm offers to fight for you.
+soo_guest.0001 = {
+    type = character_event 
+    title = soo_guest.0001.t 
+    desc = {
+        first_valid = {
+            triggered_desc = {
+                trigger = {
+                    scope:warrior_woman = { has_trait = zealous }
+                }
+                desc = soo_guest.0001.desc.zealot
+            }
+            desc = soo_guest.0001.desc 
+        }
+    }
+    
+    theme = realm
+
+    left_portrait = {
+        character = scope:warrior_woman
+        animation = personality_bold
+    }
+
+    trigger = {
+        # May happen for any ruler that is a germanic pagan
+        is_adult = yes 
+        is_ruler = yes 
+        has_religion = religion:germanic_religion
+        any_realm_province = {
+            religion = religion:germanic_religion
+            OR = {
+                has_holding_type = tribal_holding
+                has_holding_type = castle_holding
+                has_holding_type = city_holding
+                has_holding_type = church_holding
+            }
+        }
+    }
+
+    immediate = {
+        random_realm_province = {
+            limit = {
+                religion = religion:germanic_religion
+                OR = {
+                    has_holding_type = tribal_holding
+                    has_holding_type = castle_holding
+                    has_holding_type = city_holding
+                    has_holding_type = church_holding
+                }
+            }
+            save_scope_as = warrior_woman_home
+        }
+        random_list = {
+            90 = {
+                create_character = {
+                    location = root.capital_province
+                    template = soo_shield_maiden_template
+                    save_scope_as = warrior_woman
+                }
+            }
+            10 = {
+                create_character = {
+                    location = root.capital_province
+                    template = soo_exceptional_shield_maiden_template
+                    save_scope_as = warrior_woman
+                }
+            }
+            50 = {
+                trigger = {
+                    has_trait = zealous
+                }
+                create_character = {
+                    location = root.capital_province
+                    template = soo_zealous_shield_maiden_template
+                    save_scope_as = warrior_woman
+                }
+            }
+        }
+        # This is needed because dynasty = none does not appear to work
+        hidden_effect = {
+            scope:warrior_woman = {
+                set_to_lowborn = yes
+            }
+        }
+    }
+    # I shall make her a Shield-Maiden
+    option = {
+        name = {
+            trigger = {
+                scope:warrior_woman = { has_trait = zealous }
+            }
+            text = soo_guest.0001.a.zealot
+        }
+        name = {
+            trigger = {
+                NOT = { scope:warrior_woman = { has_trait = zealous } }
+            }
+            text = soo_guest.0001.a
+        }
+        add_courtier = scope:warrior_woman 
+        scope:warrior_woman = {
+            add_trait = soo_shield_maiden 
+            add_opinion = {
+                target = root
+                modifier = soo_appointed_shield_maiden_opinion
+            }
+        }
+    }
+    # A woman fighting in my armies? Unlikely.
+    option = {
+        name = soo_guest.0001.b
+    }
+}
