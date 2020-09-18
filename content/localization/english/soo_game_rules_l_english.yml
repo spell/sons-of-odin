@@ -1,6 +1,0 @@
-﻿l_english:
-    rule_soo_explicit_content:0 "Sons of Odin: Explicit Content"
-    setting_soo_explicit_content_enabled:0 "Enabled"
-    setting_soo_explicit_content_enabled_desc:0 "Events containing graphic or explicit content are enabled and can occur. #high Content warning: rape.#!"
-    setting_soo_explicit_content_disabled:0 "#high Disabled#!"
-    setting_soo_explicit_content_disabled_desc:0 "Events containing graphic or explicit content are disabled and will not occur."
