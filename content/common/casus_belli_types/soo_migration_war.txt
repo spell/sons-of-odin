@@ -22,6 +22,7 @@ soo_migration_duchy_cb = {
     # Allowed for Germanic Norse rulers only!
     allowed_for_character = {
         # Feudal vikings cannot migrate
+        NOT = { has_character_flag = soo_child_of_destiny_flag }
         NOT = { has_government = feudal_government }
         highest_held_title_tier >= tier_county
         has_religion = religion:germanic_religion

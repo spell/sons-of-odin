@@ -1,0 +1,5 @@
+﻿soo_plot_armor_modifier = {
+    icon = health_positive 
+    hostile_scheme_resistance_add = 400
+    health = 2
+}

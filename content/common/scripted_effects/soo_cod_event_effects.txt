@@ -1,0 +1,120 @@
+﻿soo_cod_sons_of_odin_find_landing_county = {
+    if = {
+        limit = {
+            title:c_upland = {
+                holder = { is_ai = yes }
+            }
+        }
+        title:c_upland = { save_scope_as = landing_site }
+    }
+    else = {
+        title:k_sweden = {
+            random_in_de_jure_hierarchy = {
+                limit = {
+                    tier = tier_county 
+                    is_coastal_county = yes
+                    holder = {
+                        AND = {
+                            is_ai = yes 
+                            NOT = { this = scope:child_of_destiny }
+                        }
+                    }
+                }
+                save_scope_as = landing_site
+            }
+        }
+    }
+    scope:landing_site.holder = { save_scope_as = landing_site_holder }
+    # This is ours now :-)
+    create_title_and_vassal_change = change
+    scope:change = {
+        set_title_and_vassal_change_type = conquest
+        set_add_claim_on_loss = yes 
+    }
+    scope:landing_site = {
+        change_title_holder = {
+            holder = scope:child_of_destiny
+            change = scope:change
+            take_baronies = yes
+        }
+    }
+    resolve_title_and_vassal_change = scope:change
+    scope:landing_site = {
+        change_county_control = 100
+        add_county_modifier = {
+            modifier = soo_landing_site_modifier
+            years = 25 
+        }
+    }
+    # And go independent, of course
+    create_title_and_vassal_change = change 
+    scope:change = {
+        set_title_and_vassal_change_type = independency 
+        set_add_claim_on_loss = no
+    }
+    becomes_independent = { change = scope:change }
+    resolve_title_and_vassal_change = scope:change
+    # Spawn massive some massive stacks 
+    spawn_army = {
+        name = event_troop_default_name
+        levies = 1000
+        men_at_arms = {
+            type = huscarl
+            stacks = 10
+        }
+        location = scope:landing_site.title_province
+        uses_supply = no
+        inheritable = yes
+    }
+    spawn_army = {
+        name = event_troop_default_name
+        levies = 1000
+        men_at_arms = {
+            type = armored_footmen
+            stacks = 10
+        }
+        location = scope:landing_site.title_province
+        uses_supply = no
+        inheritable = no
+    }
+    spawn_army = {
+        name = event_troop_default_name
+        levies = 1000
+        men_at_arms = {
+            type = armored_footmen
+            stacks = 10
+        }
+        location = scope:landing_site.title_province
+        uses_supply = no
+        inheritable = no
+    }
+    spawn_army = {
+        name = event_troop_default_name
+        levies = 1000
+        men_at_arms = {
+            type = armored_footmen
+            stacks = 10
+        }
+        location = scope:landing_site.title_province
+        uses_supply = no
+        inheritable = no
+    }
+    spawn_army = {
+        name = event_troop_default_name
+        levies = 1000
+        men_at_arms = {
+            type = bowmen
+            stacks = 10
+        }
+        location = scope:landing_site.title_province
+        uses_supply = no
+        inheritable = no
+    }
+    # And finally, declare war
+    start_war = {
+        cb = soo_manifest_destiny_subjugation_cb
+        target = scope:landing_site_holder
+        claimant = scope:child_of_destiny
+        target_title = scope:landing_site_holder.primary_title
+    }
+}

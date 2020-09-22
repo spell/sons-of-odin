@@ -1,0 +1,269 @@
+﻿#   This file is part of Sons of Odin.
+#
+#   Sons of Odin is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   Sons of Odin is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with Sons of Odin.  If not, see <https://www.gnu.org/licenses/>.
+
+# Emperor of Scandinavia
+#  This story starts randomly, with a very low chance that can be increased under certain
+#  conditions. The Emperor of Scandinavia is a character that is destined to unite the 
+#  tribes of Scandinavia under their banner.
+soo_story_emperor_of_scandinavia = {
+    on_setup = {
+        story_owner = {
+            save_scope_as = child_of_destiny
+            location = { save_scope_as = province_of_origin }
+        }
+        every_player = {
+            trigger_event = soo_child_of_destiny.0002
+        }
+    }
+    # Buff the little guy up.
+    effect_group = {
+        days = { 200 365 } 
+
+        trigger = {
+            story_owner = {
+                is_adult = no 
+            }
+        }
+
+        triggered_effect = {
+            trigger = {
+                story_owner = {
+                    is_ai = yes 
+                }
+            }
+            effect = {
+                story_owner = {
+                    random_list = {
+                        20 = {
+                            add_martial_skill = 2
+                            add_prowess_skill = 2 
+                        }
+                        20 = {
+                            add_stewardship_skill = 2
+                        }
+                        20 = {
+                            add_diplomacy_skill = 2
+                        }
+                        20 = {
+                            add_intrigue_skill = 2
+                        }
+                        20 = {
+                            add_learning_skill = 2
+                        }
+                    }
+                }
+            }
+        }
+    }
+    # If we are a young adult, it's time to stake our claim.
+    # That means: get married and get our initial lands
+    effect_group = {
+        days = { 365 1825 } # Between 1 and 5 years.
+
+        trigger = {
+            story_owner = {
+                is_adult = yes 
+                NOT = { has_character_flag = soo_cod_scandinavia_begun }
+            }
+        }
+
+        triggered_effect = {
+            trigger = {
+                story_owner = {
+                    is_ai = yes 
+                }
+            }
+            effect = {
+                story_owner = {
+                    save_scope_as = child_of_destiny
+                    # Make the character independent if he isn't yet.
+                    if = {
+                        limit = {
+                            is_ruler = no 
+                        }
+                        move_to_pool = yes 
+                    }
+                    # This character possibly couldn't be lazy or content. He's the most ambitious viking ever!
+                    if = {
+                        limit = { has_trait = content }
+                        remove_trait = content 
+                    }
+                    if = {
+                        limit = { has_trait = lazy }
+                        remove_trait = lazy 
+                    }
+                    add_trait = ambitious
+                    add_trait = diligent
+                    add_trait = varangian
+                    add_gold = 2500
+                    add_prestige = 5000
+                    # Make sure he has a wife
+                    if = {
+                        limit = {
+                            is_married = no 
+                            is_betrothed = no 
+                        }
+                        if = {
+                            limit = {
+                                title:e_byzantium = {
+                                    is_title_created = yes 
+                                    exists = holder
+                                    holder = {
+                                        any_child = {
+                                            is_adult = yes 
+                                            is_female = yes 
+                                            age <= 21
+                                            NOT = { is_heir_of = prev }
+                                        }
+                                    } 
+                                }
+                            }
+                            # Check if the emperor has any viable children
+                            title:e_byzantium.holder = {
+                                random_child = {
+                                    limit = {
+                                        is_adult = yes 
+                                        is_female = yes 
+                                        age <= 21
+                                        NOT = { is_heir_of = prev }
+                                    }
+                                    save_scope_as = destined_wife
+                                }
+                            }
+                        }
+                        else = {
+                            create_character = {
+                                location = title:c_byzantion.title_province
+                                culture = title:c_byzantion.title_province.culture
+                                faith = title:c_byzantion.title_province.faith
+                                gender = female 
+                                save_scope_as = destined_wife 
+                            }
+                        }
+                        scope:destined_wife = {
+                            add_trait = beauty_good_3 
+                            add_trait = intellect_good_2 
+                            add_trait = fecund 
+                        }
+                        marry = scope:destined_wife
+                        if = {
+                            limit = { has_trait = zealous }
+                            scope:destined_wife = {
+                                set_character_faith = scope:child_of_destiny.faith 
+                            }
+                        }
+                    }
+                    # And a claim on all Nordic lands, of course!
+                    add_pressed_claim = title:k_sweden
+                    add_pressed_claim = title:k_denmark 
+                    add_pressed_claim = title:k_norway
+                    # Give him one last final buff
+                    add_martial_skill = 10
+                    add_prowess_skill = 10
+                    add_stewardship_skill = 8
+                    add_diplomacy_skill = 5
+                    add_learning_skill = 5
+                    add_intrigue_skill = 5 
+                    # We're ready to start in earnest now
+                    add_character_flag = {
+                        flag = soo_cod_scandinavia_begun
+                    }
+                    add_character_flag = {
+                        flag = soo_child_of_destiny_flag
+                    }
+                    trigger_event = {
+                        id = soo_child_of_destiny.0101
+                        days = { 7 14 } # 1 to 2 weeks
+                    }
+                }
+                every_player = {
+                    trigger_event = soo_child_of_destiny.0100
+                }
+            }
+        }
+    }
+    # If we are an adult, go to war if we're not already.
+    effect_group = {
+        days = { 50 100 }
+
+        trigger = {
+            story_owner = {
+                is_adult = yes 
+                is_ruler = yes 
+                is_at_war = no 
+                has_character_flag = soo_cod_scandinavia_begun
+                NOT = {
+                    any_held_title = { this = title:e_scandinavia }
+                }
+            }
+        }
+        # This effect will demand a Asatru Norse ruler to either submit or be
+        # conquered.
+        triggered_effect = {
+            trigger = {
+                story_owner = {
+                    is_ai = yes 
+                }
+            }
+            effect = {
+                story_owner = {
+                    save_scope_as = child_of_destiny
+                    if = {
+                        limit = { exists = title:k_sweden.holder }
+                        start_war = {
+                            cb = soo_manifest_destiny_subjugation_cb
+                            target = title:k_sweden.holder.top_liege
+                            claimant = scope:child_of_destiny
+                            target_title = title:k_sweden
+                        }
+                    }
+                    else = {
+                        ordered_independent_ruler = {
+                            limit = { 
+                                NOT = { this = scope:child_of_destiny }
+                                highest_held_title_tier > tier_county 
+                                any_sub_realm_county = {
+                                    any_neighboring_county = {
+                                        holder = {
+                                            target_is_same_character_or_above = scope:child_of_destiny
+                                        }
+                                    }
+                                }
+                            }
+                            order_by = {
+                                every_sub_realm_county = {
+                                    limit = { kingdom = title:k_sweden }
+                                    add = 100
+                                }
+                                every_sub_realm_county = {
+                                    limit = { empire = title:e_scandinavia }
+                                    add = 1
+                                }
+                            }
+                            position = 0
+                            save_scope_as = war_target
+                        }
+                        start_war = {
+                            cb = soo_manifest_destiny_subjugation_cb
+                            target = scope:war_target
+                            claimant = scope:child_of_destiny
+                            target_title = scope:war_target.primary_title
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

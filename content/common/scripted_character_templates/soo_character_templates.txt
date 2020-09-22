@@ -77,3 +77,22 @@ soo_zealous_shield_maiden_template = {
     trait = holy_warrior
     random_traits = no 
 }
+
+### Byzantine wife for the Child of Destiny 
+soo_child_of_destiny_son_of_odin_spouse = {
+    age = { 16 21 }
+    dynasty = none 
+    diplomacy = 8
+    martial = 4
+    intrigue = 10
+    stewardship = 12
+    learning = 9
+    prowess = 4
+    trait = education_learning_3
+    trait = beauty_good_3
+    trait = intellect_good_2 
+    trait = diligent
+    trait = generous
+    trait = patient 
+    random_traits = no 
+}

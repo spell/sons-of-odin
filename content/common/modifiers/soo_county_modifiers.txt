@@ -1,0 +1,8 @@
+﻿soo_landing_site_modifier = {
+	icon = county_modifier_opinion_positive
+	county_opinion_add = 50
+	development_growth_factor = large_development_growth_gain
+    tax_mult = 5
+    levy_size = 10
+    levy_reinforcement_rate = 1
+}

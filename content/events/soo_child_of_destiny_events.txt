@@ -1,0 +1,256 @@
+﻿#   This file is part of Sons of Odin.
+#
+#   Sons of Odin is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   Sons of Odin is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with Sons of Odin.  If not, see <https://www.gnu.org/licenses/>.
+
+namespace = soo_child_of_destiny 
+
+# Child of Destiny event chains 
+#  0001-0999 - Child of Destiny: Son of Odin
+#  1000-1999 - Child of Destiny: King of Norway and England
+#  2000-2999 - Child of Destiny: The Fire of Heaven 
+#  3000-3999 - Child of Destiny: The Revenge of Britannia  
+
+# Child of Destiny: Son of Odin entry point
+## Are we destined for glory?
+soo_child_of_destiny.0001 = {
+    hidden = yes
+
+    trigger = {
+        NOT = { has_global_variable = soo_cod_son_of_odin_born }
+        scope:child = {
+            AND = {
+                mother = { 
+                    exists = this
+                    is_ai = yes 
+                    has_culture_group = culture_group:north_germanic_group
+                    has_religion = religion:germanic_religion
+                    location = { geographical_region = world_europe_north }
+                }
+            }
+            is_ai = yes 
+            # Sorry ladies, but this event chain makes little sense as female.
+            is_male = yes
+            has_religion = religion:germanic_religion
+            has_culture_group = culture_group:north_germanic_group 
+        }
+    }
+
+    immediate = {
+        debug_log = "Potential Child of Destiny born!"
+        random = {
+            chance = 25
+            modifier = {
+                add = -10000
+                scope:child = { 
+                    OR = {
+                        has_trait = inbred
+                        has_trait = intellect_bad_1
+                        has_trait = intellect_bad_2
+                        has_trait = intellect_bad_3 
+                        has_trait = physique_bad_1
+                        has_trait = physique_bad_2
+                        has_trait = physique_bad_3
+                    }
+                } 
+            }
+            modifier = {
+                add = 100
+                scope:child = { has_trait = physique_good_3 }
+            }
+            modifier = {
+                add = 100
+                scope:child = { has_trait = intellect_good_3 }
+            }
+            modifier = {
+                add = 100
+                scope:child = { has_trait = giant }
+            }
+            debug_log = "Child of Destiny is born!"
+            set_global_variable = {
+                name = soo_cod_son_of_odin_born
+                value = yes 
+            }
+            scope:child = {
+                add_trait = disputed_heritage
+                add_character_modifier = {
+                    modifier = soo_plot_armor_modifier
+                }
+                add_character_flag = {
+                    flag = immune_to_disease
+                    years = 21
+                }
+                # Look, this kid has got a very special destiny ahead of them.
+                # If they're not strong, they soon will be.
+                if = {
+                    limit = {
+                        AND = {
+                            NOT = { has_trait = physique_good_1 }
+                            NOT = { has_trait = physique_good_2 }
+                            NOT = { has_trait = physique_good_3 }
+                        }
+                    }
+                    random_list = {
+                        30 = {
+                            # nothing
+                        }
+                        10 = {
+                            add_trait = physique_good_1
+                        }
+                        45 = {
+                            add_trait = physique_good_2
+                        }
+                        15 = {
+                            add_trait = physique_good_3
+                        }
+                    }
+                }
+                # If they're not smart, they soon will be.
+                if = {
+                    limit = {
+                        AND = {
+                            NOT = { has_trait = intellect_good_1 }
+                            NOT = { has_trait = intellect_good_2 }
+                            NOT = { has_trait = intellect_good_3 }
+                        }
+                    }
+                    random_list = {
+                        30 = {
+                            # nothing
+                        }
+                        10 = {
+                            add_trait = intellect_good_1
+                        }
+                        45 = {
+                            add_trait = intellect_good_2
+                        }
+                        15 = {
+                            add_trait = intellect_good_3
+                        }
+                    }
+                }
+                # And if they're not a dwarf nor a giant, roll for that.
+                random = {
+                    chance = 35 
+                    modifier = {
+                        add = -100
+                        has_trait = dwarf 
+                    }
+                    add_trait = giant 
+                }
+                # Finally, start the story!
+                save_scope_as = story_owner 
+                create_story = soo_story_emperor_of_scandinavia
+            }
+        }
+    }
+}
+
+# Inform everyone of this special child that has been born.
+soo_child_of_destiny.0002 = {
+    type = character_event 
+    title = soo_child_of_destiny.0002.t
+    desc = soo_child_of_destiny.0002.desc
+    theme = faith
+    left_portrait = root
+    right_portrait = scope:child_of_destiny_debug_only
+
+    trigger = {
+        OR = {
+            has_religion = religion:germanic_religion
+            has_culture_group = culture_group:north_germanic_group
+        }
+    }
+
+    immediate = {
+        if = {
+            limit = { debug_only = yes }
+            scope:child_of_destiny = { 
+                save_temporary_scope_as = child_of_destiny_debug_only 
+            }
+        }
+    }
+
+    option = {
+        name = {
+            trigger = { has_trait = zealous }
+            text = soo_child_of_destiny.0002.a.zealot 
+        }
+        name = {
+            trigger = { has_trait = cynical }
+            text = soo_child_of_destiny.0002.a.cynical 
+        }
+        name = {
+            trigger = { has_trait = arrogant }
+            text = soo_child_of_destiny.0002.a.arrogant 
+        }
+        name = {
+            trigger = { NOT = { has_religion = religion:germanic_religion } }
+            text = soo_child_of_destiny.0002.a.nonpagan
+        }
+        name = {
+            trigger = { always = yes }
+            text = soo_child_of_destiny.0002.a
+        }
+    }
+}
+
+# The story begins...
+soo_child_of_destiny.0100 = {
+    type = character_event 
+    title = soo_child_of_destiny.0100.t
+    desc = soo_child_of_destiny.0100.desc
+    theme = martial 
+
+    left_portrait = {
+		character = scope:child_of_destiny 
+		animation = personality_bold
+	}   
+
+    option = {
+        name = soo_child_of_destiny.0100.a.nordic
+    }
+}
+
+
+soo_child_of_destiny.0101 = {
+    hidden = yes 
+
+    immediate = {
+        soo_cod_sons_of_odin_find_landing_county = yes 
+        every_player = {
+            trigger_event = soo_child_of_destiny.0102
+        }
+    }
+}
+
+soo_child_of_destiny.0102 = {
+    type = character_event
+    title = soo_child_of_destiny.0102.t 
+    desc = soo_child_of_destiny.0102.desc 
+    theme = war
+
+    left_portrait = {
+		character = scope:child_of_destiny 
+		animation = personality_bold
+	} 
+    right_portrait = {
+        character = scope:landing_site_holder 
+        animation = rage 
+    }
+
+    option = {
+        name = soo_child_of_destiny.0102.a
+        tooltip = soo_child_of_destiny.0102.a.tt
+    }
+}
